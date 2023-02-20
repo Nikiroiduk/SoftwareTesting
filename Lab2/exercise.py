@@ -50,5 +50,4 @@ class Triangle(Enum):
     Scalene     = 1
     Isosceles   = 2
     Equilateral = 3
-
-
+    

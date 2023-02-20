@@ -66,3 +66,4 @@ print('triangleAreaCalcTest_NegativeSide : {}'   .format('Ok' if (triangleAreaCa
 print('triangleAreaCalcTest_ZeroSide : {}'       .format('Ok' if (triangleAreaCalcTest_ZeroSide() == 0)        else 'Fail'))
 
 
+

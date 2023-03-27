@@ -1,0 +1,53 @@
+﻿<Window x:Class="ExerciseWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:crtr="clr-namespace:ExerciseWPF.Converter"
+        mc:Ignorable="d"
+        Title="{Binding Title}" Height="450" Width="800"
+        >
+    <Window.Resources>
+        <crtr:MatrixToText x:Key="MatrixConverter"/>
+    </Window.Resources>
+    <Grid Margin="8">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="12*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="0">
+            <!--Enter data-->
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox Header="Matrix A" Grid.Row="0">
+                <TextBox Text="{Binding MatrixA, Converter={StaticResource MatrixConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" Padding="15" FontSize="20"/>
+            </GroupBox>
+            <GroupBox Header="Matrix B" Grid.Row="1">
+                <TextBox Text="{Binding MatrixB, Converter={StaticResource MatrixConverter}, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" AcceptsReturn="True" Padding="15" FontSize="20"/>
+            </GroupBox>
+        </Grid>
+        <Grid Grid.Column="1">
+            <!--Result-->
+            <GroupBox Header="Matrix A x B" Grid.Row="1">
+                <TextBlock Text="{Binding MatrixC, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource MatrixConverter}}" Padding="15" FontSize="20"/>
+            </GroupBox>
+        </Grid>
+        <GroupBox Header="Controls" Grid.Row="1" Grid.ColumnSpan="2">
+            <Grid Margin="5, 0, 5, 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Margin="5, 0, 5, 0" Grid.Column="0" Command="{Binding RandomValues}" Content="Generate random values"/>
+                <Button Margin="5, 0, 5, 0" Grid.Column="1" Command="{Binding CopyResult}" Content="Copy result"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

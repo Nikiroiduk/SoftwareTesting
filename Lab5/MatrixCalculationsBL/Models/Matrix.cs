@@ -8,7 +8,7 @@ namespace MatrixCalculationsBL.Models
 {
     public class Matrix
     {
-        private object matrix { get; set; }
+        private object matrix { get; set; } = null;
         private uint R { get; set; } = 0;
         private uint C { get; set; } = 0;
 
@@ -51,6 +51,8 @@ namespace MatrixCalculationsBL.Models
         public uint GetR() => R;
         public uint GetC() => C;
 
+        public object GetMatrix() => matrix;
+
         public double this[int x_key, int y_key]
         {
             get
@@ -67,6 +69,11 @@ namespace MatrixCalculationsBL.Models
                 else
                     throw new Exception($"Matrix is incorrect!");
             }
+        }
+
+        public Matrix()
+        {
+            
         }
 
         public static Matrix operator *(Matrix A, Matrix B)
@@ -90,6 +97,41 @@ namespace MatrixCalculationsBL.Models
 
             return res;
         }
+
+        public static bool operator ==(Matrix A, Matrix B)
+        {
+            return A.CompareTo(B);
+        }
+
+        public static bool operator !=(Matrix A, Matrix B)
+        {
+            return !A.CompareTo(B);
+        }
+
+        public bool CompareTo(Matrix m)
+        {
+            if (this.R != m.GetR())
+                return false;
+            if (this.C != m.GetC())
+                return false;
+
+            if (matrix is double[,] A && m.GetMatrix() is double[,] B)
+            {
+                for (int i = 0; i < this.R; i++)
+                {
+                    for(int j = 0; j < this.C; j++)
+                    {
+                        if (A[i, j] != B[i, j])
+                            return false;
+                    }
+                }
+                return true;
+            }
+            else 
+                return false;
+        }
+
+        public bool isNull() => matrix == null;
 
         public override string ToString()
         {

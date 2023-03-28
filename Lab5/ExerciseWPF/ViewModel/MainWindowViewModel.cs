@@ -7,12 +7,21 @@ using Matrix = MatrixCalculationsBL.Models.Matrix;
 
 namespace ExerciseWPF.ViewModel
 {
-    internal class MainWindowViewModel : ViewModel
+    public class MainWindowViewModel : ViewModel
     {
-        private readonly bool isTesting;
+        private bool isTesting;
 
         public MainWindowViewModel()
         {
+            #region Commands
+            RandomValues = new LambdaCommand(OnRandomValues, CanRandomValues);
+            CopyResult = new LambdaCommand(OnCopyResult, CanCopyResult);
+            #endregion
+        }
+
+        public MainWindowViewModel(bool isTesting)
+        {
+            this.isTesting = isTesting;
             #region Commands
             RandomValues = new LambdaCommand(OnRandomValues, CanRandomValues);
             CopyResult = new LambdaCommand(OnCopyResult, CanCopyResult);
@@ -41,7 +50,7 @@ namespace ExerciseWPF.ViewModel
         #endregion
 
         #region MatrixA
-        private Matrix _MatrixA;
+        private Matrix _MatrixA = new Matrix();
 
         public Matrix MatrixA
         {
@@ -56,7 +65,7 @@ namespace ExerciseWPF.ViewModel
         #endregion
 
         #region MatrixB
-        private Matrix _MatrixB;
+        private Matrix _MatrixB = new Matrix();
 
         public Matrix MatrixB
         {
@@ -70,7 +79,7 @@ namespace ExerciseWPF.ViewModel
         #endregion
 
         #region MatrixC
-        private Matrix _MatrixC;
+        private Matrix _MatrixC = new Matrix();
 
         public Matrix MatrixC
         {
@@ -78,11 +87,11 @@ namespace ExerciseWPF.ViewModel
             set 
             { 
                 Set(ref _MatrixC, value);
-                Title = $"{MatrixC.GetR()}x{MatrixC.GetC()}";
+                Title = $"{MatrixC?.GetR()}x{MatrixC?.GetC()}";
                 if (isTesting)
                 {
-                    Console.WriteLine(MatrixC.ToString());
-                    Application.Current.Shutdown();
+                    Console.WriteLine(MatrixC?.ToString());
+                    Application.Current?.Shutdown();
                 }
             } 
         }
@@ -94,7 +103,27 @@ namespace ExerciseWPF.ViewModel
         private bool CanRandomValues(object p) => true;
         private void OnRandomValues(object p)
         {
-            //TODO: Generate random matrices
+            var rand = new Random();
+            var x = rand.Next(2, 5);
+            var y = rand.Next(2, 5);
+
+            var a = new double[x, y];
+            var b = new double[y, x];
+
+            for (int i = 0; i < x; i++)
+            {
+                for (int j = 0; j < y; j++)
+                {
+                    a[i, j] = rand.Next(-10, 10);
+                    b[j, i] = rand.Next(-10, 10);
+                }
+            }
+
+            //Konstantin
+            isTesting = true;
+            MatrixA = new Matrix(a);
+            isTesting = false;
+            MatrixB = new Matrix(b);
         }
         #endregion
 
@@ -104,7 +133,7 @@ namespace ExerciseWPF.ViewModel
         private bool CanCopyResult(object p) => true;
         private void OnCopyResult(object p)
         {
-            Clipboard.SetText(MatrixC != null ? MatrixC.ToString() : "Empty");
+            Clipboard.SetText(MatrixC.isNull() ? "Empty" : MatrixC.ToString());
         }
         #endregion
     }
